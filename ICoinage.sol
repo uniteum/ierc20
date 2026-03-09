@@ -9,24 +9,24 @@ pragma solidity ^0.8.30;
 interface ICoinage {
     /**
      * @notice Checks whether a token with the given parameters has already been deployed.
+     * @param maker  The address of the token maker.
      * @param name   The token name.
      * @param symbol The token symbol.
      * @param supply The total supply.
-     * @return yes  `true` if the clone already exists.
-     * @return home The deterministic address of the clone.
+     * @return deployed  `true` if the token already exists.
+     * @return home The deterministic address of the token.
      * @return salt The CREATE2 salt derived from `(name, symbol, supply)`.
      */
-    function made(string calldata name, string calldata symbol, uint256 supply)
+    function made(address maker, string calldata name, string calldata symbol, uint256 supply)
         external
         view
-        returns (bool yes, address home, bytes32 salt);
+        returns (bool deployed, address home, bytes32 salt);
 
     /**
-     * @notice Deploys a new ERC-20 token (or returns the existing one) and
-     *         mints the full supply to the caller.
+     * @notice Deploys a new or returns an existing ERC-20 token.
      * @param name   The token name.
      * @param symbol The token symbol.
-     * @param supply The total supply to mint.
+     * @param supply The initial supply to mint.
      * @return token The address of the (possibly pre-existing) token.
      */
     function make(string calldata name, string calldata symbol, uint256 supply) external returns (ICoinage token);
@@ -39,7 +39,7 @@ interface ICoinage {
      * @param symbol      The token symbol.
      * @param totalSupply The supply minted to `maker`.
      */
-    event Make(address indexed maker, ICoinage indexed token, string name, string symbol, uint256 totalSupply);
+    event Made(address indexed maker, ICoinage indexed token, string name, string symbol, uint256 totalSupply);
 
     /**
      * @notice Thrown when the token name is empty.

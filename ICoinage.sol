@@ -13,14 +13,14 @@ interface ICoinage {
      * @param name   The token name.
      * @param symbol The token symbol.
      * @param supply The total supply.
-     * @return deployed  `true` if the token already exists.
+     * @return exists  `true` if the token already exists.
      * @return home The deterministic address of the token.
      * @return salt The CREATE2 salt derived from `(name, symbol, supply)`.
      */
     function made(address maker, string calldata name, string calldata symbol, uint256 supply)
         external
         view
-        returns (bool deployed, address home, bytes32 salt);
+        returns (bool exists, address home, bytes32 salt);
 
     /**
      * @notice Deploys a new or returns an existing ERC-20 token.

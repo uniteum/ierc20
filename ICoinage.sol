@@ -13,23 +13,27 @@ interface ICoinage {
      * @param name   The token name.
      * @param symbol The token symbol.
      * @param supply The total supply.
+     * @param salt   Caller-supplied salt used to distinguish otherwise identical deployments.
      * @return exists  `true` if the token already exists.
      * @return home The deterministic address of the token.
-     * @return salt The CREATE2 salt derived from `(name, symbol, supply)`.
+     * @return create2Salt The CREATE2 salt derived from `(maker, name, symbol, supply, salt)`.
      */
-    function made(address maker, string calldata name, string calldata symbol, uint256 supply)
+    function made(address maker, string calldata name, string calldata symbol, uint256 supply, bytes32 salt)
         external
         view
-        returns (bool exists, address home, bytes32 salt);
+        returns (bool exists, address home, bytes32 create2Salt);
 
     /**
      * @notice Deploys a new or returns an existing ERC-20 token.
      * @param name   The token name.
      * @param symbol The token symbol.
      * @param supply The initial supply to mint.
+     * @param salt   Caller-supplied salt used to distinguish otherwise identical deployments.
      * @return token The address of the (possibly pre-existing) token.
      */
-    function make(string calldata name, string calldata symbol, uint256 supply) external returns (ICoinage token);
+    function make(string calldata name, string calldata symbol, uint256 supply, bytes32 salt)
+        external
+        returns (ICoinage token);
 
     /**
      * @notice Emitted when a new ERC-20 token is created via {make}.

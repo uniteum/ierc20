@@ -1,6 +1,8 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.30;
 
+import {IERC20Metadata} from "./IERC20Metadata.sol";
+
 /**
  * @title ICoinage
  * @notice Interface for an ERC-20 token maker.
@@ -33,7 +35,7 @@ interface ICoinage {
      */
     function make(string calldata name, string calldata symbol, uint256 supply, bytes32 salt)
         external
-        returns (ICoinage token);
+        returns (IERC20Metadata token);
 
     /**
      * @notice Emitted when a new ERC-20 token is created via {make}.
@@ -43,7 +45,7 @@ interface ICoinage {
      * @param symbol      The token symbol.
      * @param totalSupply The supply minted to `maker`.
      */
-    event Made(address indexed maker, ICoinage indexed token, string name, string symbol, uint256 totalSupply);
+    event Made(address indexed maker, IERC20Metadata indexed token, string name, string symbol, uint256 totalSupply);
 
     /**
      * @notice Thrown when the token name is empty.

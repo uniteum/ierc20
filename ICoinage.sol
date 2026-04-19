@@ -11,29 +11,35 @@ import {IERC20Metadata} from "./IERC20Metadata.sol";
 interface ICoinage {
     /**
      * @notice Checks whether a token with the given parameters has already been deployed.
-     * @param maker  The address of the token maker.
-     * @param name   The token name.
-     * @param symbol The token symbol.
-     * @param supply The total supply.
-     * @param salt   Caller-supplied salt used to distinguish otherwise identical deployments.
+     * @param maker    The address of the token maker.
+     * @param name     The token name.
+     * @param symbol   The token symbol.
+     * @param decimals The number of decimals for display purposes.
+     * @param supply   The total supply, denominated in the smallest unit.
+     * @param salt     Caller-supplied salt used to distinguish otherwise identical deployments.
      * @return exists  `true` if the token already exists.
      * @return home The deterministic address of the token.
-     * @return create2Salt The CREATE2 salt derived from `(maker, name, symbol, supply, salt)`.
+     * @return create2Salt The CREATE2 salt derived from `(maker, name, symbol, decimals, supply, salt)`.
      */
-    function made(address maker, string calldata name, string calldata symbol, uint256 supply, bytes32 salt)
-        external
-        view
-        returns (bool exists, address home, bytes32 create2Salt);
+    function made(
+        address maker,
+        string calldata name,
+        string calldata symbol,
+        uint8 decimals,
+        uint256 supply,
+        bytes32 salt
+    ) external view returns (bool exists, address home, bytes32 create2Salt);
 
     /**
      * @notice Deploys a new or returns an existing ERC-20 token.
-     * @param name   The token name.
-     * @param symbol The token symbol.
-     * @param supply The initial supply to mint.
-     * @param salt   Caller-supplied salt used to distinguish otherwise identical deployments.
+     * @param name     The token name.
+     * @param symbol   The token symbol.
+     * @param decimals The number of decimals for display purposes.
+     * @param supply   The initial supply to mint, denominated in the smallest unit.
+     * @param salt     Caller-supplied salt used to distinguish otherwise identical deployments.
      * @return token The address of the (possibly pre-existing) token.
      */
-    function make(string calldata name, string calldata symbol, uint256 supply, bytes32 salt)
+    function make(string calldata name, string calldata symbol, uint8 decimals, uint256 supply, bytes32 salt)
         external
         returns (IERC20Metadata token);
 
@@ -43,9 +49,17 @@ interface ICoinage {
      * @param token       The newly created token.
      * @param name        The token name.
      * @param symbol      The token symbol.
+     * @param decimals    The number of decimals for display purposes.
      * @param totalSupply The supply minted to `maker`.
      */
-    event Made(address indexed maker, IERC20Metadata indexed token, string name, string symbol, uint256 totalSupply);
+    event Made(
+        address indexed maker,
+        IERC20Metadata indexed token,
+        string name,
+        string symbol,
+        uint8 decimals,
+        uint256 totalSupply
+    );
 
     /**
      * @notice Thrown when the token name is empty.
